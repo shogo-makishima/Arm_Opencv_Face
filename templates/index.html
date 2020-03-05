@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title> Setting Detection API </title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script type="text/javascript" language="javascript" src="static/js/main.js"></script>
+    <link rel="stylesheet" href="static/css/style.css">
+</head>
+<body>
+    <div id="container">
+        <div id="header">
+            <h1> Setting Detection API </h1>
+        </div>
+             
+        <div id="sidebar">
+            <button id="updateImageButton" onclick="UpdateImage();"> Update Image </button>
+            
+            <p id="updateImageButton"> KEY </p>
+            <input id="updateImageButton" name="keyAccess" placeholder="(str) Key to send data: " value="None">
+
+            <!-- <input id="updateImageButton" name="cascade" placeholder="(string) Name cascade: " value="haarcascade_frontalface_default.xml"> -->
+
+            <p id="updateImageButton"> Main Settings </p>
+            <input id="updateImageButton" name="scaleFactor" placeholder="(float) Scale Factor: " value="1.3">
+            <input id="updateImageButton" name="minNeighbors" placeholder="(integer) Min Neighbors: " value="8">
+            <input id="updateImageButton" name="area" placeholder="(integer) Area: " value="25000">
+
+            <p id="updateImageButton"> Select Cascade </p>
+            <select id="updateImageButton" name="cascadeSelector">
+                <option value="haarcascade_frontalface_default.xml"> haarcascade_frontalface_default.xml </option>
+            </select>
+            <button id="updateImageButton" onclick="SetOptionsCascade();"> Update Cascades </button>
+
+            <p id="updateImageButton"> Send Settigs to server </p>
+            <button id="updateImageButton" onclick="SendSettings();"> Send Settings </button>
+        </div>
+             
+        <div id="content">
+            <img id="image_canvas">
+        </div>
+             
+        <div id="clear"></div>
+    </div>
+
+    <script> 
+        UpdateImage();
+        SetOptionsCascade();
+    </script>
+</body>
+</html>
