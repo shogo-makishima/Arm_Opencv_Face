@@ -11,12 +11,14 @@ function UpdateImage(){
 }
 
 function SendSettings(){
+    alert("Stay and not spam on buttons.")
     $.ajax({
         url: "/_send_settings/",
         type: "POST",
         data: { 
             type: 'json',
             cascade: $('select[name$="cascadeSelector"]').children("option:selected").val(),
+            port: $('select[name$="portSelector"]').children("option:selected").val(),
             scaleFactor: $('input[name$="scaleFactor"]').val(),
             minNeighbors: $('input[name$="minNeighbors"]').val(),
             area: $('input[name$="area"]').val(),
@@ -26,7 +28,7 @@ function SendSettings(){
             if (result.response == 900){
                 alert("Access denied! Uncorrect password! ")
             } else {
-                alert("Please, don't spam on button's.")
+                alert("Successfull!")
             }
         }
     });
@@ -45,11 +47,19 @@ function SetOptionsCascade(){
             }
         }
     });
-    /*
-    optionText = 'Premium'; 
-    optionValue = 'premium'; 
-    
-    $('select[name$="cascadeSelector"]').find('option').remove().end()
-    $('select[name$="cascadeSelector"]').append(`<option value="${optionValue}"> ${optionText} </option>`);
-    */
+}
+
+
+function SetOptionsPorts(){
+    $.ajax({
+        url: "/_get_ports/",
+        type: "POST",
+        data: { type: 'json' },
+        success: function(result) {
+            $('select[name$="portSelector"]').find('option').remove().end()
+            for (var i = 0; i < result.ports.length; i++) {
+                $('select[name$="portSelector"]').append(`<option value="${result.ports[i]}"> ${result.ports[i]} </option>`);
+            }
+        }
+    });
 }
