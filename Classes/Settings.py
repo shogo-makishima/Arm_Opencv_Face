@@ -3,6 +3,7 @@ class Settings:
     resolution: tuple = (1280, 720)
     capIndex: int = 0
 
+    showWindow: bool = True
     port: str = None
 
     key: str = "What314.5Color?"

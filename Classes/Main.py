@@ -1,4 +1,4 @@
-from cv2 import CascadeClassifier, VideoCapture, cvtColor, COLOR_BGR2GRAY, rectangle, imencode
+from cv2 import CascadeClassifier, VideoCapture, cvtColor, COLOR_BGR2GRAY, rectangle, imencode, imshow, waitKey
 from Classes.Settings import Settings
 import base64, serial, asyncio, threading, time
 
@@ -24,7 +24,14 @@ class Main:
         asyncio.run(self.Start())
 
         self.loopThread = threading.Thread(target=self.MainLoop)
+        self.loopThread.daemon = True
         self.loopThread.start()
+
+        if (Settings.showWindow):
+            self.cameraThread = threading.Thread(target=self.CameraOut)
+            self.cameraThread.daemon = True
+            self.cameraThread.start()
+
 
     async def Start(self) -> None:
         self.face_cascade = CascadeClassifier(f"Files/{Settings.cascade}")
@@ -38,7 +45,13 @@ class Main:
         jpg_as_text = base64.b64encode(buffer)
         return jpg_as_text
 
-    @threadsafeFunction
+    def CameraOut(self):
+        while True:
+            if (self.image is not None): 
+                imshow("Image", self.image)
+                waitKey(25)
+
+
     def MainLoop(self):
         while True:
             if (not self.cap and not self.face_cascade): continue
@@ -52,6 +65,8 @@ class Main:
 
             for (x, y, w, h) in faces:
                 if (w * h < Settings.minArea): continue
-                else: 
-                    if (self.serialArduino): self.serialArduino.write(bytes("d", encoding="utf-8"))
-                    rectangle(self.image, (x, y), (x + w, y + h), (255, 0, 0), 2)
+                else: rectangle(self.image, (x, y), (x + w, y + h), (255, 0, 0), 2)
+
+                if (self.serialArduino): self.serialArduino.write(bytes("d", encoding="utf-8"))
+            
+            time.sleep(0.03)
