@@ -1,6 +1,6 @@
 class Settings:
     cascade: str = "haarcascade_frontalface_default.xml"
-    resolution: tuple = (1280, 720)
+    resolution: tuple = (320, 240)
     capIndex: int = 0
 
     showWindow: bool = True
@@ -11,7 +11,7 @@ class Settings:
     scaleFactor: float = 1.3
     minNeighbors: int = 8
 
-    minArea: int = 25000
+    minArea: int = 10000
 
     def SetSetting(self, getScaleFactor: float = 1.3, getMinNeighbors: int = 8, getMinArea: int = 25000, getCapIndex: int = 0, getCascade: str = "haarcascade_frontalface_default.xml", getPort: str = "COM6") -> None:
         self.scaleFactor = getScaleFactor

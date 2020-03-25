@@ -1,4 +1,4 @@
-from cv2 import CascadeClassifier, VideoCapture, cvtColor, COLOR_BGR2GRAY, rectangle, imencode, imshow, waitKey
+from cv2 import CascadeClassifier, CAP_PROP_FPS, VideoCapture, cvtColor, COLOR_BGR2GRAY, rectangle, imencode, imshow, waitKey
 from Classes.Settings import Settings
 import base64, serial, asyncio, threading, time
 
@@ -35,19 +35,23 @@ class Main:
 
     async def Start(self) -> None:
         self.face_cascade = CascadeClassifier(f"Files/{Settings.cascade}")
-        self.cap = VideoCapture(Settings.capIndex)
-        if (Settings.port): self.serialArduino = serial.Serial(port=Settings.port, baudrate=9600)        
+        if (not self.cap):
+            self.cap = VideoCapture(Settings.capIndex)
+            self.cap.set(3, Settings.resolution[0])
+            self.cap.set(4, Settings.resolution[1])
+
+        if (Settings.port): self.serialArduino = serial.Serial(port=Settings.port, baudrate=9600)
 
     def GetImage(self): return self.image
 
     def ImageToBase64(self, image=None) -> str:
         retval, buffer = imencode('.jpg', image)
-        jpg_as_text = base64.b64encode(buffer)
+        jpg_as_text = base64.b64encode(buffer).decode("ascii")
         return jpg_as_text
 
     def CameraOut(self):
         while True:
-            if (self.image is not None): 
+            if (self.image is not None):
                 imshow("Image", self.image)
                 waitKey(25)
 
@@ -58,7 +62,7 @@ class Main:
             _, self.image = self.cap.read()
             gray = cvtColor(self.image, COLOR_BGR2GRAY)
             faces = self.face_cascade.detectMultiScale(gray, Settings.scaleFactor, Settings.minNeighbors)
-            
+
             if (len(faces) == 0):
                 if (self.serialArduino): self.serialArduino.write(bytes("n", encoding="utf-8"))
                 continue
@@ -68,5 +72,3 @@ class Main:
                 else: rectangle(self.image, (x, y), (x + w, y + h), (255, 0, 0), 2)
 
                 if (self.serialArduino): self.serialArduino.write(bytes("d", encoding="utf-8"))
-            
-            time.sleep(0.03)
