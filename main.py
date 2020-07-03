@@ -1,7 +1,7 @@
 from Classes.Main import Main
 from Classes.Settings import Settings
 from flask import Flask, render_template, request, jsonify
-import os, asyncio, serial.tools.list_ports_linux
+import os, asyncio, serial.tools.list_ports
 
 main = Main()
 app = Flask(__name__)
@@ -23,7 +23,7 @@ def SendCascades():
 
 @app.route("/_get_ports/", methods=["GET", "POST"])
 def SendPorts():
-    ports = [i.device for i in list(serial.tools.list_ports_linux.comports())]
+    ports = [i.device for i in list(serial.tools.list_ports.comports())]
     return jsonify({"ports": ports})
 
 

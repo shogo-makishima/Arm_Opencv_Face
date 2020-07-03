@@ -5,6 +5,9 @@ class Settings:
 
     showWindow: bool = True
     port: str = None
+    speed: int = 9600
+
+    timerPause: float = 0.2
 
     key: str = "What314.5Color?"
 
